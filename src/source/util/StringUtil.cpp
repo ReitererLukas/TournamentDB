@@ -9,9 +9,11 @@ std::string StringReader::extractWord(std::string& txt, size_t& position) {
     char ch = txt.at(position);
     if(((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || (ch >= '0' && ch <= '9')) && !word_finished) {
       word.push_back(ch);
-    } else if (ch == ' ' && word.length() > 0 && !word_finished) {
+    } else if (word.length() > 0 && !word_finished) {
       word_finished = true;
-    } else if(word_finished && ch != ' ') {
+    } 
+    
+    if(word_finished && ch != ' ') {
       return word;
     }
     position++;
@@ -27,14 +29,17 @@ int StringReader::extractInteger(std::string& txt, size_t& position) {
   bool word_finished = false;
   while(position < txt.length()) {
     char ch = txt.at(position);
-    if((ch >= '0' && ch <= '9') && !word_finished) {
+    if(((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || (ch >= '0' && ch <= '9')) && !word_finished) {
       word_found = true;
       integer = integer * 10 + (int)(ch - '0');
-    } else if (ch == ' ' && word_found && !word_finished) {
+    } else if (word_found && !word_finished) {
       word_finished = true;
-    } else if(word_finished && ch != ' ') {
+    } 
+    
+    if(word_finished && ch != ' ') {
       return integer;
     }
+
     position++;
   }
 
