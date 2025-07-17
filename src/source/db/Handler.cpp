@@ -1,20 +1,22 @@
 #include "Handler.h"
-#include "shared-memory.h"
+#include "SharedMemory.h"
 #include "db-definitions.h"
 #include "FileSystemUtil.h"
 #include <algorithm>
+#include <assert.h>
 
 Handler::Handler() {
   data_path_ = DATA_PATH;
 
   // init mutex locks
-  int fd = shm_open(HANDLER_LOCK_SHM, O_CREAT | O_RDWR, SHM_OPEN_MODE);
-  ftruncate(fd, sizeof(std::mutex));
-  structures_mutex_ = (std::mutex*) mmap(0, sizeof(std::mutex), PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+  structures_mutex_ = SharedMemory::getLock(HANDLER_LOCK_SHM);
+
+  // init shared buffer
+  shared_buffer_ = SharedMemory::getSharedBuffer();
 }
 
 Handler::~Handler() {
-  munmap(structures_mutex_, sizeof(std::mutex));
+  SharedMemory::unmap(structures_mutex_, sizeof(std::mutex));
 }
 
 bool Handler::createNewStructure(CreateParamters& params) {

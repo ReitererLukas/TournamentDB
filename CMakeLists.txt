@@ -16,6 +16,7 @@ include_directories(src/include/util)
 include_directories(src/include/db)
 include_directories(src/include/commandmodels)
 include_directories(src/include/models)
+include_directories(src/include/shared)
 
 # Gather all source files
 file(GLOB SOURCES
@@ -25,6 +26,7 @@ file(GLOB SOURCES
     "src/source/db/*.cpp"
     "src/source/commandmodels/*.cpp"
     "src/source/models/*.cpp"
+    "src/source/shared/*.cpp"
 )
 
 add_executable(TournamentDB ${SOURCES})

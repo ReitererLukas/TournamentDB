@@ -1,10 +1,12 @@
 #pragma once
 
 #include <vector>
+#include <mutex>
+
 #include "types.h"
 #include "BaseCommand.h"
 #include "CreateModel.h"
-#include <mutex>
+#include "SharedBuffer.h"
 
 class Handler {
 
@@ -18,7 +20,8 @@ private:
 
   // locking
   std::mutex* structures_mutex_;
-
+  
+  SharedBuffer* shared_buffer_;
 
 // Singleton logic
 public:
