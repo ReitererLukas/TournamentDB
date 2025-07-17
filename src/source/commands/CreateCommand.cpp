@@ -3,6 +3,7 @@
 #include "Handler.h"
 #include "CreateModel.h"
 #include <iostream>
+#include <algorithm>
 
 bool CreateCommand::executeCommand(std::vector<std::string>& params) {
   CreateParamters parametersContainer;
@@ -10,7 +11,29 @@ bool CreateCommand::executeCommand(std::vector<std::string>& params) {
     return false;
   }
 
+  std::cout << (parametersContainer.type_ == Structure::Type::LIGA ? 1 : 0) << " " << parametersContainer.name_ << std::endl;
+  for(auto const& field : parametersContainer.fields_) {
+    std::cout << field.field_name_ << " " << (field.dt_ == Datatype::Type::INT ? 1 : 0) << " " << field.ranking_ << " " << field.is_pk_ << std::endl;
+  }
+
+  if(!areParametersValid(parametersContainer)) {
+    return false;
+  }
+
+
   return Handler::instance()->createNewStructure(parametersContainer);
+}
+
+bool CreateCommand::areParametersValid(CreateParamters& container) {
+  std::vector<std::string> names;
+  for(auto const& field : container.fields_) {
+    if(std::find(names.begin(), names.end(), field.field_name_) != names.end()) {
+      return false; // duplicated field name
+    }
+    names.push_back(field.field_name_);
+  }
+
+  return true;
 }
 
 bool CreateCommand::parseParameters(std::vector<std::string>& params, BaseParamContainer* paramContainer) {
@@ -89,7 +112,6 @@ bool CreateCommand::parseParameters(std::vector<std::string>& params, BaseParamC
 
         ch = concatedArguments.at(position);
         if(ch == ',') {
-          step = 4;
         } else if(ch == '}') {
           step = 5;
           container->fields_.push_back(field);

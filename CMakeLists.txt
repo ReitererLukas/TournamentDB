@@ -14,6 +14,7 @@ include_directories(src/include)
 include_directories(src/include/commands)
 include_directories(src/include/util)
 include_directories(src/include/db)
+include_directories(src/include/commandmodels)
 include_directories(src/include/models)
 
 # Gather all source files
@@ -22,6 +23,7 @@ file(GLOB SOURCES
     "src/source/commands/*.cpp"
     "src/source/util/*.cpp"
     "src/source/db/*.cpp"
+    "src/source/commandmodels/*.cpp"
     "src/source/models/*.cpp"
 )
 

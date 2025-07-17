@@ -37,8 +37,8 @@ bool Handler::createNewStructure(CreateParamters& params) {
   structures_mutex_->unlock();
 
   // create all the necessary files
-  std::string dp = data_path; 
-  FileSystemUtil::createFile(dp.append("/pks"));
+  std::string dp = data_path;
+  FileSystemUtil::createFile(dp.append("/type"));
   dp = data_path; 
   FileSystemUtil::createFile(dp.append("/games"));
   dp = data_path; 

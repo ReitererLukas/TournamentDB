@@ -9,6 +9,8 @@ struct CreateField {
   int ranking_;
   bool is_pk_;
 
+  CreateField();
+
   void reset();
 };
 

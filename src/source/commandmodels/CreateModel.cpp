@@ -6,3 +6,7 @@ void CreateField::reset() {
   ranking_ = 0;
   is_pk_ = false;
 }
+
+CreateField::CreateField() {
+  reset();
+}

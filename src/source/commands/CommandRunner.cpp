@@ -13,6 +13,7 @@
 
 CommandRunner::CommandRunner() {
   commands_.push_back(new CreateCommand("CREATE"));
+  commands_.push_back(new CreateCommand("INSERT"));
 }
 
 CommandRunner::~CommandRunner() {
@@ -23,7 +24,7 @@ CommandRunner::~CommandRunner() {
 
 
 void CommandRunner::test() {
-  std::string input = "CREATE LIGA test(f1{INT,0,pk})";
+  std::string input = "CREATE LIGA test (f1{INT, 18124})";
   if(executeCommand(input)) {
     std::cout << "OK" << std::endl;
   } else {

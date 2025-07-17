@@ -29,7 +29,7 @@ int StringReader::extractInteger(std::string& txt, size_t& position) {
   bool word_finished = false;
   while(position < txt.length()) {
     char ch = txt.at(position);
-    if(((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || (ch >= '0' && ch <= '9')) && !word_finished) {
+    if((ch >= '0' && ch <= '9') && !word_finished) {
       word_found = true;
       integer = integer * 10 + (int)(ch - '0');
     } else if (word_found && !word_finished) {
@@ -37,6 +37,8 @@ int StringReader::extractInteger(std::string& txt, size_t& position) {
     } 
     
     if(word_finished && ch != ' ') {
+      return integer;
+    } else if(!word_found && ch != ' ') {
       return integer;
     }
 
@@ -51,7 +53,7 @@ bool StringReader::waitForNextArgument(std::string& txt, size_t& position, char 
 
   while(position < txt.length()) {
     char ch = txt.at(position);
-    if(ch != ' ' && ch != separator && !separator_found) {
+    if(ch != ' ' && ch != separator) {
       return separator_found;
     } else if(ch == separator) {
       separator_found = true;
@@ -67,7 +69,9 @@ std::vector<std::string> StringUtil::splitString(std::string& cmd, std::string d
   size_t position = 0;
   while ((position = cmd.find(delimiter)) != std::string::npos) {
       std::string token = cmd.substr(0, position);
-      tokens.push_back(token);
+      if(token != "") {
+        tokens.push_back(token);
+      }
       cmd.erase(0, position + delimiter.length());
   }
   tokens.push_back(cmd);
