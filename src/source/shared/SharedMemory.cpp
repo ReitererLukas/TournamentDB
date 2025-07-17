@@ -19,6 +19,7 @@ std::mutex* SharedMemory::getLock(std::string file) {
   int fd = open(file.c_str(), O_CREAT | O_RDWR, SHM_OPEN_MODE);
   ftruncate(fd, sizeof(std::mutex));
   void* lock = mmap(0, sizeof(std::mutex), PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+  close(fd);
 
   if(lock == MAP_FAILED) {
     assert(false && "Lock init failed");
@@ -32,6 +33,7 @@ SharedBuffer* SharedMemory::getSharedBuffer() {
   int fd = open(SHARED_BUFFER_SHM, O_CREAT | O_RDWR, SHM_OPEN_MODE);
   ftruncate(fd, shared_buffer_length);
   void* start_shared_memory = mmap(0, shared_buffer_length, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+  close(fd);
   
   if(start_shared_memory == MAP_FAILED) {
     assert(false && "Shared Buffer init failed");
@@ -44,6 +46,7 @@ PageTableKey* SharedMemory::getPageTable() {
   int fd = open(PAGE_TABLE_SHM, O_CREAT | O_RDWR, SHM_OPEN_MODE);
   ftruncate(fd, page_table_length);
   void* page_table = mmap(0, page_table_length, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+  close(fd);
 
   if(page_table == MAP_FAILED) {
     assert(false && "Page Table init failed");

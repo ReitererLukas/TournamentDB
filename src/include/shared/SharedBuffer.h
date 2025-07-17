@@ -3,9 +3,11 @@
 #include <map>
 
 class SharedBuffer {
-  const void* shared_memory_start_;
+  void* address_;
   std::map<size_t, size_t> basic_page_table_; //
 
 public:
-  SharedBuffer(void* shared_memory_start);
+  SharedBuffer(void* address);
+
+  void* getAddress() { return address_; }
 };

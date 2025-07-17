@@ -1,13 +1,21 @@
 #include <iostream>
 #include <netinet/in.h>
 #include <cstring>
-#include "CommandRunner.h"
 #include <unistd.h>
+#include <mutex>
+#include "CommandRunner.h"
+#include "SharedMemory.h"
+#include "db-definitions.h"
+#include "BufferBlock.h"
+#include "SharedBuffer.h"
 
 #define PORT 9876
 
+void resetSHMObjects();
+
 // https://github.com/bozkurthan/Simple-TCP-Server-Client-CPP-Example/blob/master/tcp-Server.cpp
 int main() {
+  resetSHMObjects();
   std::cout << "Starting DB" << std::endl;
   CommandRunner::instance()->test();
 
@@ -60,4 +68,13 @@ int main() {
   }
   close(serverSd);
   return 0; 
+}
+
+void resetSHMObjects() {
+  memset((void*)SharedMemory::getLock(HANDLER_LOCK_SHM), 0, sizeof(std::mutex));
+
+  // TODO: for now clearing is fine. But what would be best if the db doesn't shut down gracefully?
+  // maybe we then want to recover the data in the shared buffer that wasn't written yet?
+  memset(SharedMemory::getPageTable(), 0, sizeof(PageTableKey) * SHARED_BUFFER_SLOTS);
+  memset(SharedMemory::getSharedBuffer()->getAddress(), 0, sizeof(BufferBlock) * SHARED_BUFFER_SLOTS);
 }
