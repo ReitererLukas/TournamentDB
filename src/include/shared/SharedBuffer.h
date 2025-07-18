@@ -1,10 +1,11 @@
 #pragma once
 
 #include <map>
+#include "PageTable.h"
 
 class SharedBuffer {
   void* address_;
-  std::map<size_t, size_t> basic_page_table_; //
+  PageTable* page_table_; //
 
 public:
   SharedBuffer(void* address);

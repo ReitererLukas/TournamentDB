@@ -19,7 +19,7 @@ private:
 
 
   // locking
-  std::mutex* structures_mutex_;
+  std::mutex* handler_lock_;
   
   SharedBuffer* shared_buffer_;
 

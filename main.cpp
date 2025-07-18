@@ -71,10 +71,10 @@ int main() {
 }
 
 void resetSHMObjects() {
-  memset((void*)SharedMemory::getLock(HANDLER_LOCK_SHM), 0, sizeof(std::mutex));
+  memset((void*)SharedMemory::getLockFileMapped(), 0, sizeof(std::mutex) * Locks::number_of_locks());
 
   // TODO: for now clearing is fine. But what would be best if the db doesn't shut down gracefully?
-  // maybe we then want to recover the data in the shared buffer that wasn't written yet?
+  // maybe we then want to recover the data in the shared buffer that wasn't written to the files yet?
   memset(SharedMemory::getPageTable(), 0, sizeof(PageTableKey) * SHARED_BUFFER_SLOTS);
   memset(SharedMemory::getSharedBuffer()->getAddress(), 0, sizeof(BufferBlock) * SHARED_BUFFER_SLOTS);
 }
